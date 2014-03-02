@@ -10,14 +10,16 @@
 # default.pa config file:
 # load-module module-null-sink sink_name=icecast sink_properties=device.description=Icecast
 # then use your PulseAudio settings (pavucontrol or otherwise) to redirect a
-# client to the sink. Please note that this script will stream FLAC audio which
-# will make it usable only in intranet environments. For slower networks either
+# client to the sink. Please note that this script will stream FLAC audio to 
+# preserve quality as much as possible and preset to L1 compression for lowest
+# CPU usage (bandwidth is ~1.5Mbit/s), which in turn is guaranteed to be usable
+# only in LAN environments. For slower networks either
 # increase the COMPRESSION value or consider modifying the gstreamer chain to
-# use other (lossy) compression methods eg. vorbisenc:
+# use other (lossy) compression methods eg. vorbis:
 # gst-launch-0.10 pulsesrc device=$PULSEAUDIO_SINK.monitor ! audio/x-raw-int,rate=44100,channels=2,width=16 ! audioconvert ! vorbisenc quality=0.5 ! oggmux ! shout2send ip=$ICECAST_IP port=$ICECAST_PORT password=$ICECAST_PASSWORD mount=$ICECAST_MOUNT
 #
 # Dependencies:
-# pulseaudio (obviously), pactl, gstreamer 0.10, mpc (if MPD is enabled)
+# pulseaudio (obviously), pactl, gstreamer 0.10, IceCast2 server (if streaming to local), mpc (if MPD is enabled)
 
 # Name of the PulseAudio sink as defined in the default.pa file:
 PULSEAUDIO_SINK=icecast
@@ -32,7 +34,7 @@ ICECAST_PASSWORD=hackme
 # Mount (filename) of the stream on the IceCast2 server:
 ICECAST_MOUNT=vorbis.ogg
 # IP address of the MPD server. If empty, MPD functionality will be disabled:
-MPD_IP=192.168.0.16
+MPD_IP=
 # FLAC compression level. Values 1-10:
 COMPRESSION=1
 # Set to 1 to show debug messages. Useful for weeding out gremlins or if you're just curious.
